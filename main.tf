@@ -122,7 +122,7 @@ resource "aws_dynamodb_table" "default" {
 
 module "dynamodb_autoscaler" {
   enabled = local.enabled && var.enable_autoscaler && var.billing_mode == "PROVISIONED"
-  source  = "github.com/justtrackio/terraform-aws-dynamodb-autoscaler?ref=v1.0.0"
+  source  = "github.com/justtrackio/terraform-aws-dynamodb-autoscaler?ref=v1.0.1"
 
   attributes                     = concat(module.this.attributes, var.autoscaler_attributes)
   tags                           = merge(module.this.tags, var.autoscaler_tags)
