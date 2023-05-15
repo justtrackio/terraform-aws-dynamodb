@@ -4,7 +4,7 @@ output "global_secondary_index_names" {
 }
 
 output "local_secondary_index_names" {
-  value       = [for gsi in null_resource.local_secondary_index_names : gsi.triggers.name]
+  value       = [for lsi in null_resource.local_secondary_index_names : lsi.triggers.name]
   description = "DynamoDB local index names"
 }
 
