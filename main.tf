@@ -123,7 +123,7 @@ resource "aws_dynamodb_table" "default" {
 module "dynamodb_autoscaler" {
   enabled = local.enabled && var.enable_autoscaler && var.billing_mode == "PROVISIONED"
   source  = "justtrackio/dynamodb-autoscaler/aws"
-  version = "1.0.2"
+  version = "1.0.3"
 
   attributes                     = concat(module.this.attributes, var.autoscaler_attributes)
   tags                           = merge(module.this.tags, var.autoscaler_tags)
