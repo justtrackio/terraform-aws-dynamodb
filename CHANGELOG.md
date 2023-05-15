@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v1.0.3...v1.0.4) (2023-05-15)
+
+
+### Bug Fixes
+
+* adjust_versions_variables_outputs ([#21](https://github.com/justtrackio/terraform-aws-dynamodb-table/issues/21)) ([125fd52](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/125fd52083a0ec16d26cb04026abe8e65cb4a222))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
