@@ -71,12 +71,7 @@ resource "aws_dynamodb_table" "this" {
     kms_key_arn = var.server_side_encryption_kms_key_arn
   }
 
-  tags = merge(
-    var.tags,
-    {
-      "Name" = format("%s", var.name)
-    },
-  )
+  tags = module.this.tags
 
   timeouts {
     create = lookup(var.timeouts, "create", null)
@@ -109,7 +104,7 @@ resource "aws_dynamodb_table" "autoscaled" {
   }
 
   dynamic "attribute" {
-    for_each = var.attributes
+    for_each = var.attribute
 
     content {
       name = attribute.value.name
