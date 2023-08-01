@@ -1,7 +1,7 @@
 resource "aws_dynamodb_table" "this" {
   count = var.create_table && !var.autoscaling_enabled ? 1 : 0
 
-  name                        = module.this.id
+  name                        = var.name
   billing_mode                = var.billing_mode
   hash_key                    = var.hash_key
   range_key                   = var.range_key
@@ -71,7 +71,12 @@ resource "aws_dynamodb_table" "this" {
     kms_key_arn = var.server_side_encryption_kms_key_arn
   }
 
-  tags = module.this.tags
+  tags = merge(
+    var.tags,
+    {
+      "Name" = format("%s", var.name)
+    },
+  )
 
   timeouts {
     create = lookup(var.timeouts, "create", null)
@@ -83,7 +88,7 @@ resource "aws_dynamodb_table" "this" {
 resource "aws_dynamodb_table" "autoscaled" {
   count = var.create_table && var.autoscaling_enabled && !var.ignore_changes_global_secondary_index ? 1 : 0
 
-  name                        = module.this.id
+  name                        = var.name
   billing_mode                = var.billing_mode
   hash_key                    = var.hash_key
   range_key                   = var.range_key
@@ -104,7 +109,7 @@ resource "aws_dynamodb_table" "autoscaled" {
   }
 
   dynamic "attribute" {
-    for_each = var.attribute
+    for_each = var.attributes
 
     content {
       name = attribute.value.name
@@ -153,7 +158,12 @@ resource "aws_dynamodb_table" "autoscaled" {
     kms_key_arn = var.server_side_encryption_kms_key_arn
   }
 
-  tags = module.this.tags
+  tags = merge(
+    var.tags,
+    {
+      "Name" = format("%s", var.name)
+    },
+  )
 
   timeouts {
     create = lookup(var.timeouts, "create", null)
@@ -169,7 +179,7 @@ resource "aws_dynamodb_table" "autoscaled" {
 resource "aws_dynamodb_table" "autoscaled_gsi_ignore" {
   count = var.create_table && var.autoscaling_enabled && var.ignore_changes_global_secondary_index ? 1 : 0
 
-  name                        = module.this.id
+  name                        = var.name
   billing_mode                = var.billing_mode
   hash_key                    = var.hash_key
   range_key                   = var.range_key
@@ -239,7 +249,12 @@ resource "aws_dynamodb_table" "autoscaled_gsi_ignore" {
     kms_key_arn = var.server_side_encryption_kms_key_arn
   }
 
-  tags = module.this.tags
+  tags = merge(
+    var.tags,
+    {
+      "Name" = format("%s", var.name)
+    },
+  )
 
   timeouts {
     create = lookup(var.timeouts, "create", null)
