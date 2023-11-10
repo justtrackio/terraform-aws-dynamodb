@@ -1,216 +1,203 @@
-variable "autoscale_max_read_capacity" {
-  type        = number
-  default     = 1000
-  description = "DynamoDB autoscaling max read capacity"
-}
-
-variable "autoscale_max_write_capacity" {
-  type        = number
-  default     = 1000
-  description = "DynamoDB autoscaling max write capacity"
-}
-
-variable "autoscale_min_read_capacity" {
-  type        = number
-  default     = 1
-  description = "DynamoDB autoscaling min read capacity"
-}
-
-variable "autoscale_min_write_capacity" {
-  type        = number
-  default     = 1
-  description = "DynamoDB autoscaling min write capacity"
-}
-
-variable "autoscale_read_schedule" {
-  type = list(object({
-    schedule     = string
-    min_capacity = number
-    max_capacity = number
-  }))
-  description = "Provides an DynamoDB autoscaling scheduled action resource"
+variable "attribute" {
+  description = "List of nested attribute definitions. Only required for hash_key and range_key attributes. Each attribute has two properties: name - (Required) The name of the attribute, type - (Required) Attribute type, which must be a scalar type: S, N, or B for (S)tring, (N)umber or (B)inary data"
+  type        = list(map(string))
   default     = []
 }
 
-variable "autoscale_read_schedule_index" {
-  type = list(object({
-    schedule     = string
-    min_capacity = number
-    max_capacity = number
-  }))
-  description = "Provides an DynamoDB autoscaling scheduled action resource"
-  default     = []
+variable "autoscaling_defaults" {
+  description = "A map of default autoscaling settings"
+  type        = map(string)
+  default = {
+    scale_in_cooldown  = 0
+    scale_out_cooldown = 0
+    target_value       = 70
+  }
 }
 
-variable "autoscale_read_target" {
-  type        = number
-  default     = 75
-  description = "The target value (in %) for DynamoDB read autoscaling"
+variable "autoscaling_enabled" {
+  description = "Whether or not to enable autoscaling. See note in README about this setting"
+  type        = bool
+  default     = false
 }
 
-variable "autoscale_write_schedule" {
-  type = list(object({
-    schedule     = string
-    min_capacity = number
-    max_capacity = number
-  }))
-  description = "Provides an DynamoDB autoscaling scheduled action resource"
-  default     = []
+variable "autoscaling_indexes" {
+  description = "A map of index autoscaling configurations. See example in examples/autoscaling"
+  type        = map(map(string))
+  default     = {}
 }
 
-variable "autoscale_write_schedule_index" {
-  type = list(object({
-    schedule     = string
-    min_capacity = number
-    max_capacity = number
-  }))
-  description = "Provides an DynamoDB autoscaling scheduled action resource"
-  default     = []
-}
-
-variable "autoscale_write_target" {
-  type        = number
-  default     = 75
-  description = "The target value (in %) for DynamoDB write autoscaling"
-}
-
-variable "autoscaler_attributes" {
-  type        = list(string)
-  default     = []
-  description = "Additional attributes for the autoscaler module"
-}
-
-variable "autoscaler_tags" {
+variable "autoscaling_read" {
+  description = "A map of read autoscaling settings. `max_capacity` is the only required key. See example in examples/autoscaling"
   type        = map(string)
   default     = {}
-  description = "Additional resource tags for the autoscaler module"
+}
+
+variable "autoscaling_write" {
+  description = "A map of write autoscaling settings. `max_capacity` is the only required key. See example in examples/autoscaling"
+  type        = map(string)
+  default     = {}
 }
 
 variable "billing_mode" {
+  description = "Controls how you are billed for read/write throughput and how you manage capacity. The valid values are PROVISIONED or PAY_PER_REQUEST"
   type        = string
-  default     = "PROVISIONED"
-  description = "DynamoDB Billing mode. Can be PROVISIONED or PAY_PER_REQUEST"
+  default     = "PAY_PER_REQUEST"
 }
 
-variable "dynamodb_attributes" {
-  type = list(object({
-    name = string
-    type = string
-  }))
-  default     = []
-  description = "Additional DynamoDB attributes in the form of a list of mapped values"
-}
-
-variable "dynamodb_table_exists" {
+variable "create_table" {
+  description = "Controls if DynamoDB table and associated resources are created"
   type        = bool
   default     = true
-  description = "Need to be 'false' for the initial DynamoDB table creation"
 }
 
-variable "enable_autoscaler" {
+variable "deletion_protection_enabled" {
+  description = "Enables deletion protection for table"
   type        = bool
-  default     = true
-  description = "Flag to enable/disable DynamoDB autoscaling"
+  default     = null
 }
 
-variable "enable_encryption" {
-  type        = bool
-  default     = false
-  description = "Enable DynamoDB server-side encryption"
-}
-
-variable "enable_point_in_time_recovery" {
-  type        = bool
-  default     = false
-  description = "Enable DynamoDB point in time recovery"
-}
-
-variable "enable_streams" {
-  type        = bool
-  default     = false
-  description = "Enable DynamoDB streams"
-}
-
-variable "global_secondary_index_map" {
-  type = list(object({
-    hash_key           = string
-    name               = string
-    non_key_attributes = list(string)
-    projection_type    = string
-    range_key          = string
-    read_capacity      = number
-    write_capacity     = number
-  }))
+variable "global_secondary_indexes" {
+  description = "Describe a GSI for the table; subject to the normal limits on the number of GSIs, projected attributes, etc."
+  type        = any
   default     = []
-  description = "Additional global secondary indexes in the form of a list of mapped values"
 }
 
 variable "hash_key" {
+  description = "The attribute to use as the hash (partition) key. Must also be defined as an attribute"
   type        = string
-  description = "DynamoDB table Hash Key"
+  default     = null
 }
 
-variable "hash_key_type" {
-  type        = string
-  default     = "S"
-  description = "Hash Key type, which must be a scalar type: `S`, `N`, or `B` for (S)tring, (N)umber or (B)inary data"
+variable "ignore_changes_global_secondary_index" {
+  description = "Whether to ignore changes lifecycle to global secondary indices, useful for provisioned tables with scaling"
+  type        = bool
+  default     = false
 }
 
-variable "local_secondary_index_map" {
-  type = list(object({
-    name               = string
-    non_key_attributes = list(string)
-    projection_type    = string
-    range_key          = string
-  }))
+variable "local_secondary_indexes" {
+  description = "Describe an LSI on the table; these can only be allocated at creation so you cannot change this definition after you have created the resource."
+  type        = any
   default     = []
-  description = "Additional local secondary indexes in the form of a list of mapped values"
+}
+
+variable "point_in_time_recovery_enabled" {
+  description = "Whether to enable point-in-time recovery"
+  type        = bool
+  default     = false
 }
 
 variable "range_key" {
+  description = "The attribute to use as the range (sort) key. Must also be defined as an attribute"
   type        = string
-  default     = ""
-  description = "DynamoDB table Range Key"
+  default     = null
 }
 
-variable "range_key_type" {
-  type        = string
-  default     = "S"
-  description = "Range Key type, which must be a scalar type: `S`, `N`, or `B` for (S)tring, (N)umber or (B)inary data"
+variable "read_capacity" {
+  description = "The number of read units for this table. If the billing_mode is PROVISIONED, this field should be greater than 0"
+  type        = number
+  default     = null
 }
 
-variable "replicas" {
-  type        = list(string)
+variable "replica_regions" {
+  description = "Region names for creating replicas for a global DynamoDB table."
+  type        = any
   default     = []
-  description = "List of regions to create replica"
+}
+
+variable "schedule_scaling_indexes_read" {
+  description = "A map of index schedule scaling configurations."
+  type = map(list(object({
+    schedule     = string
+    min_capacity = number
+    max_capacity = number
+  })))
+  default = {}
+}
+
+variable "schedule_scaling_indexes_write" {
+  description = "A map of index schedule scaling configurations."
+  type = map(list(object({
+    schedule     = string
+    min_capacity = number
+    max_capacity = number
+  })))
+  default = {}
+}
+
+variable "schedule_scaling_read" {
+  description = "A map of read schedule scaling settings. `max_capacity` is the only required key."
+  type = list(object({
+    schedule     = string
+    min_capacity = number
+    max_capacity = number
+  }))
+  default = []
+}
+
+variable "schedule_scaling_write" {
+  description = "A map of write schedule scaling settings. `max_capacity` is the only required key."
+  type = list(object({
+    schedule     = string
+    min_capacity = number
+    max_capacity = number
+  }))
+  default = []
+}
+
+variable "server_side_encryption_enabled" {
+  description = "Whether or not to enable encryption at rest using an AWS managed KMS customer master key (CMK)"
+  type        = bool
+  default     = false
 }
 
 variable "server_side_encryption_kms_key_arn" {
+  description = "The ARN of the CMK that should be used for the AWS KMS encryption. This attribute should only be specified if the key is different from the default DynamoDB CMK, alias/aws/dynamodb."
   type        = string
   default     = null
-  description = "The ARN of the CMK that should be used for the AWS KMS encryption. This attribute should only be specified if the key is different from the default DynamoDB CMK, alias/aws/dynamodb."
+}
+
+variable "stream_enabled" {
+  description = "Indicates whether Streams are to be enabled (true) or disabled (false)."
+  type        = bool
+  default     = false
 }
 
 variable "stream_view_type" {
+  description = "When an item in the table is modified, StreamViewType determines what information is written to the table's stream. Valid values are KEYS_ONLY, NEW_IMAGE, OLD_IMAGE, NEW_AND_OLD_IMAGES."
+  type        = string
+  default     = null
+}
+
+variable "table_class" {
+  description = "The storage class of the table. Valid values are STANDARD and STANDARD_INFREQUENT_ACCESS"
+  type        = string
+  default     = null
+}
+
+variable "timeouts" {
+  description = "Updated Terraform resource management timeouts"
+  type        = map(string)
+  default = {
+    create = "10m"
+    update = "60m"
+    delete = "10m"
+  }
+}
+
+variable "ttl_attribute_name" {
+  description = "The name of the table attribute to store the TTL timestamp in"
   type        = string
   default     = ""
-  description = "(Optional) When an item in the table is modified, StreamViewType determines what information is written to the table's stream. Valid values are `KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, `NEW_AND_OLD_IMAGES`."
-}
-
-variable "tags_enabled" {
-  type        = bool
-  default     = true
-  description = "Set to `false` to disable tagging. This can be helpful if you're managing tables on dynamodb-local with terraform as it doesn't support tagging."
-}
-
-variable "ttl_attribute" {
-  type        = string
-  default     = "ttl"
-  description = "DynamoDB table TTL attribute"
 }
 
 variable "ttl_enabled" {
+  description = "Indicates whether ttl is enabled"
   type        = bool
-  default     = true
-  description = "Set to false to disable DynamoDB table TTL"
+  default     = false
+}
+
+variable "write_capacity" {
+  description = "The number of write units for this table. If the billing_mode is PROVISIONED, this field should be greater than 0"
+  type        = number
+  default     = null
 }

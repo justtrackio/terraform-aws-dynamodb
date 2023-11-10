@@ -1,34 +1,19 @@
-output "global_secondary_index_names" {
-  value       = [for gsi in null_resource.global_secondary_index_names : gsi.triggers.name]
-  description = "DynamoDB secondary index names"
+output "dynamodb_table_arn" {
+  description = "ARN of the DynamoDB table"
+  value       = try(aws_dynamodb_table.this[0].arn, aws_dynamodb_table.autoscaled[0].arn, aws_dynamodb_table.autoscaled_gsi_ignore[0].arn, "")
 }
 
-output "local_secondary_index_names" {
-  value       = [for lsi in null_resource.local_secondary_index_names : lsi.triggers.name]
-  description = "DynamoDB local index names"
+output "dynamodb_table_id" {
+  description = "ID of the DynamoDB table"
+  value       = try(aws_dynamodb_table.this[0].id, aws_dynamodb_table.autoscaled[0].id, aws_dynamodb_table.autoscaled_gsi_ignore[0].id, "")
 }
 
-output "table_arn" {
-  value       = try(aws_dynamodb_table.default[0].arn, "")
-  description = "DynamoDB table ARN"
+output "dynamodb_table_stream_arn" {
+  description = "The ARN of the Table Stream. Only available when var.stream_enabled is true"
+  value       = var.stream_enabled ? try(aws_dynamodb_table.this[0].stream_arn, aws_dynamodb_table.autoscaled[0].stream_arn, aws_dynamodb_table.autoscaled_gsi_ignore[0].stream_arn, "") : null
 }
 
-output "table_id" {
-  value       = try(aws_dynamodb_table.default[0].id, "")
-  description = "DynamoDB table ID"
-}
-
-output "table_name" {
-  value       = try(aws_dynamodb_table.default[0].name, "")
-  description = "DynamoDB table name"
-}
-
-output "table_stream_arn" {
-  value       = try(aws_dynamodb_table.default[0].stream_arn, "")
-  description = "DynamoDB table stream ARN"
-}
-
-output "table_stream_label" {
-  value       = try(aws_dynamodb_table.default[0].stream_label, "")
-  description = "DynamoDB table stream label"
+output "dynamodb_table_stream_label" {
+  description = "A timestamp, in ISO 8601 format of the Table Stream. Only available when var.stream_enabled is true"
+  value       = var.stream_enabled ? try(aws_dynamodb_table.this[0].stream_label, aws_dynamodb_table.autoscaled[0].stream_label, aws_dynamodb_table.autoscaled_gsi_ignore[0].stream_label, "") : null
 }
