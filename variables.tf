@@ -55,7 +55,7 @@ variable "point_in_time_recovery_enabled" {
 variable "ttl_enabled" {
   description = "Indicates whether ttl is enabled"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "ttl_attribute_name" {
