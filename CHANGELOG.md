@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [2.0.1](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.0.0...v2.0.1) (2023-11-15)
+
+
+### Bug Fixes
+
+* Disable ttl by default ([#39](https://github.com/justtrackio/terraform-aws-dynamodb-table/issues/39)) ([2ab2b46](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/2ab2b4609e316c4d563b51ef083184ca77600f4b))
+* Enable workflows ([#40](https://github.com/justtrackio/terraform-aws-dynamodb-table/issues/40)) ([84ea8d4](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/84ea8d439fe8cea051d56a45407eea6eea3da2f8))
+
 ## [3.3.0](https://github.com/terraform-aws-modules/terraform-aws-dynamodb-table/compare/v3.2.0...v3.3.0) (2023-05-25)
 
 
