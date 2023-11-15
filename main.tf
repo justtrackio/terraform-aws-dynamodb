@@ -1,5 +1,5 @@
 locals {
-  ttl_attribute_name = var.ttl_enabled ? var.ttl_attribute_name : ""
+  ttl_attribute_name = var.ttl_enabled == true ? var.ttl_attribute_name : ""
 }
 
 resource "aws_dynamodb_table" "this" {
