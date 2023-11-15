@@ -1,3 +1,7 @@
+locals {
+  ttl_attribute_name = var.ttl_enabled ? var.ttl_attribute_name : ""
+}
+
 resource "aws_dynamodb_table" "this" {
   count = var.create_table && !var.autoscaling_enabled ? 1 : 0
 
@@ -14,7 +18,7 @@ resource "aws_dynamodb_table" "this" {
 
   ttl {
     enabled        = var.ttl_enabled
-    attribute_name = var.ttl_attribute_name
+    attribute_name = local.ttl_attribute_name
   }
 
   point_in_time_recovery {
@@ -101,7 +105,7 @@ resource "aws_dynamodb_table" "autoscaled" {
 
   ttl {
     enabled        = var.ttl_enabled
-    attribute_name = var.ttl_attribute_name
+    attribute_name = local.ttl_attribute_name
   }
 
   point_in_time_recovery {
@@ -192,7 +196,7 @@ resource "aws_dynamodb_table" "autoscaled_gsi_ignore" {
 
   ttl {
     enabled        = var.ttl_enabled
-    attribute_name = var.ttl_attribute_name
+    attribute_name = local.ttl_attribute_name
   }
 
   point_in_time_recovery {
