@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [2.0.2](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.0.1...v2.0.2) (2023-11-15)
+
+
+### Bug Fixes
+
+* Define ttl attribute_name only when ttl is enabled ([#41](https://github.com/justtrackio/terraform-aws-dynamodb-table/issues/41)) ([1a8a64b](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/1a8a64b706f55adb48a51741b4cb6d585677d6b6))
+
 ### [2.0.1](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.0.0...v2.0.1) (2023-11-15)
 
 
