@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - main
     paths:
       - '**/*.tpl'
       - '**/*.py'
@@ -13,22 +13,28 @@ on:
 
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
+    # Skip running release workflow on forks
+    if: github.repository_owner == 'justtrackio'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
-          fetch-depth: 0
+          fetch-depth: '0'
 
       - name: Release
-        uses: cycjimmy/semantic-release-action@v3
+        uses: cycjimmy/semantic-release-action@v4
         with:
-          semantic_version: 18.0.0
+          semantic_version: '21.1.1'
           extra_plugins: |
-            @semantic-release/changelog@6.0.0
-            @semantic-release/git@10.0.0
-            conventional-changelog-conventionalcommits@4.6.3
+            @semantic-release/changelog
+            @semantic-release/git
+            conventional-changelog-conventionalcommits@6.1.0
+          branches: |
+            [
+              '+([0-9])?(.{+([0-9]),x}).x',
+              'main'
+            ]
         env:
-          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_SEMANTIC_RELEASE_TOKEN_2023 }}
