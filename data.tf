@@ -1,6 +1,6 @@
 locals {
-  gsi_read_capacity_defined  = try(coalesce(var.global_secondary_indexes[*].read_capacity), []) != []
-  gsi_write_capacity_defined = try(coalesce(var.global_secondary_indexes[*].write_capacity), []) != []
+  gsi_read_capacity_defined  = can(coalesce(var.global_secondary_indexes[*].read_capacity))
+  gsi_write_capacity_defined = can(coalesce(var.global_secondary_indexes[*].write_capacity))
   check_gsi_data             = !alltrue([local.gsi_read_capacity_defined, local.gsi_write_capacity_defined])
 }
 
