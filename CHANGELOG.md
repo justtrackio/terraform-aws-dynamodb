@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.0.2...v2.1.0) (2024-03-18)
+
+
+### Features
+
+* ignore gsi capacity but still needed for initial creation ([fa09cb0](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/fa09cb070266d4f1a18a0e5d779927ffc4fc336a))
+* ignore gsi capacity but still needed for initial creation ([#45](https://github.com/justtrackio/terraform-aws-dynamodb-table/issues/45)) ([02b4d77](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/02b4d77ffec3e11b688f05cd5e6f6e8d8f16eb65))
+
 ### [2.0.2](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.0.1...v2.0.2) (2023-11-15)
 
 
