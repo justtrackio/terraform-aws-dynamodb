@@ -1,5 +1,6 @@
 locals {
   ttl_attribute_name = var.ttl_enabled ? var.ttl_attribute_name : ""
+  gsi_list           = try(tolist(data.aws_dynamodb_table.default[0].global_secondary_index), var.global_secondary_indexes)
 }
 
 resource "aws_dynamodb_table" "this" {
@@ -53,8 +54,8 @@ resource "aws_dynamodb_table" "this" {
       hash_key           = global_secondary_index.value.hash_key
       projection_type    = global_secondary_index.value.projection_type
       range_key          = lookup(global_secondary_index.value, "range_key", null)
-      read_capacity      = lookup(global_secondary_index.value, "read_capacity", null)
-      write_capacity     = lookup(global_secondary_index.value, "write_capacity", null)
+      read_capacity      = local.gsi_list[index(local.gsi_list[*].name, global_secondary_index.value.name)].read_capacity
+      write_capacity     = local.gsi_list[index(local.gsi_list[*].name, global_secondary_index.value.name)].write_capacity
       non_key_attributes = lookup(global_secondary_index.value, "non_key_attributes", null)
     }
   }
@@ -140,8 +141,8 @@ resource "aws_dynamodb_table" "autoscaled" {
       hash_key           = global_secondary_index.value.hash_key
       projection_type    = global_secondary_index.value.projection_type
       range_key          = lookup(global_secondary_index.value, "range_key", null)
-      read_capacity      = lookup(global_secondary_index.value, "read_capacity", null)
-      write_capacity     = lookup(global_secondary_index.value, "write_capacity", null)
+      read_capacity      = local.gsi_list[index(local.gsi_list[*].name, global_secondary_index.value.name)].read_capacity
+      write_capacity     = local.gsi_list[index(local.gsi_list[*].name, global_secondary_index.value.name)].write_capacity
       non_key_attributes = lookup(global_secondary_index.value, "non_key_attributes", null)
     }
   }
