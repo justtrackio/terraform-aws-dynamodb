@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.1.0...v2.2.0) (2024-04-10)
+
+
+### Features
+
+* allow to specify principals with access to table ([#46](https://github.com/justtrackio/terraform-aws-dynamodb-table/issues/46)) ([d177ec0](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/d177ec012dc8246152adc8d1028882d86745a559))
+
 ## [2.1.0](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.0.2...v2.1.0) (2024-03-18)
 
 
