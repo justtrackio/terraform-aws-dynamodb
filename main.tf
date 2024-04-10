@@ -271,3 +271,30 @@ resource "aws_dynamodb_table" "autoscaled_gsi_ignore" {
     ignore_changes = [global_secondary_index, read_capacity, write_capacity]
   }
 }
+
+data "aws_iam_policy_document" "table_policy" {
+  count = length(var.table_policy_allow_principal_identifiers) > 0 ? 1 : 0
+  statement {
+    resources = concat(aws_dynamodb_table.this[*].arn, aws_dynamodb_table.autoscaled[*].arn, aws_dynamodb_table.autoscaled_gsi_ignore[*].arn)
+    effect    = "Allow"
+    actions   = var.table_policy_allow_actions
+    principals {
+      identifiers = var.table_policy_allow_principal_identifiers
+      type        = var.table_policy_allow_principal_type
+    }
+    dynamic "condition" {
+      for_each = length(var.table_policy_condition_values) > 0 ? [1] : []
+      content {
+        test     = var.table_policy_condition_test
+        values   = var.table_policy_condition_values
+        variable = var.table_policy_condition_variable
+      }
+    }
+  }
+}
+
+resource "aws_dynamodb_resource_policy" "policy" {
+  count        = length(var.table_policy_allow_principal_identifiers) > 0 ? 1 : 0
+  resource_arn = try(aws_dynamodb_table.this[0].arn, aws_dynamodb_table.autoscaled[0].arn, aws_dynamodb_table.autoscaled_gsi_ignore[0].arn)
+  policy       = data.aws_iam_policy_document.table_policy[0].json
+}

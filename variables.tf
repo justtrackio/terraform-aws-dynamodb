@@ -213,3 +213,39 @@ variable "ignore_changes_global_secondary_index" {
   type        = bool
   default     = false
 }
+
+variable "table_policy_allow_actions" {
+  description = "Set which actions are allowed for the given principal"
+  type        = list(string)
+  default     = ["dynamodb:*"]
+}
+
+variable "table_policy_allow_principal_identifiers" {
+  description = "Set which principals to allow access to the table"
+  type        = list(string)
+  default     = []
+}
+
+variable "table_policy_allow_principal_type" {
+  description = "Set which principal type you will specify in var.table_policy_allow_principal_identifiers"
+  type        = string
+  default     = "AWS"
+}
+
+variable "table_policy_condition_test" {
+  description = "Set which condition to use when checking access"
+  type        = string
+  default     = "ArnLike"
+}
+
+variable "table_policy_condition_values" {
+  description = "Set which conditional values to allow access to the table"
+  type        = list(string)
+  default     = []
+}
+
+variable "table_policy_condition_variable" {
+  description = "Set which conditional variable check to allow access to the table"
+  type        = string
+  default     = "aws:PrincipalArn"
+}
