@@ -60,13 +60,13 @@ Users of Terragrunt can achieve similar results by using modules provided in the
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.59 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.44 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.59 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.44 |
 
 ## Modules
 
@@ -89,10 +89,12 @@ Users of Terragrunt can achieve similar results by using modules provided in the
 | [aws_appautoscaling_target.index_write](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_target) | resource |
 | [aws_appautoscaling_target.table_read](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_target) | resource |
 | [aws_appautoscaling_target.table_write](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_target) | resource |
+| [aws_dynamodb_resource_policy.policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_resource_policy) | resource |
 | [aws_dynamodb_table.autoscaled](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
 | [aws_dynamodb_table.autoscaled_gsi_ignore](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
 | [aws_dynamodb_table.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
 | [aws_dynamodb_table.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/dynamodb_table) | data source |
+| [aws_iam_policy_document.table_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
@@ -125,6 +127,12 @@ Users of Terragrunt can achieve similar results by using modules provided in the
 | <a name="input_stream_enabled"></a> [stream\_enabled](#input\_stream\_enabled) | Indicates whether Streams are to be enabled (true) or disabled (false). | `bool` | `false` | no |
 | <a name="input_stream_view_type"></a> [stream\_view\_type](#input\_stream\_view\_type) | When an item in the table is modified, StreamViewType determines what information is written to the table's stream. Valid values are KEYS\_ONLY, NEW\_IMAGE, OLD\_IMAGE, NEW\_AND\_OLD\_IMAGES. | `string` | `null` | no |
 | <a name="input_table_class"></a> [table\_class](#input\_table\_class) | The storage class of the table. Valid values are STANDARD and STANDARD\_INFREQUENT\_ACCESS | `string` | `null` | no |
+| <a name="input_table_policy_allow_actions"></a> [table\_policy\_allow\_actions](#input\_table\_policy\_allow\_actions) | Set which actions are allowed for the given principal | `list(string)` | <pre>[<br>  "dynamodb:*"<br>]</pre> | no |
+| <a name="input_table_policy_allow_principal_identifiers"></a> [table\_policy\_allow\_principal\_identifiers](#input\_table\_policy\_allow\_principal\_identifiers) | Set which principals to allow access to the table | `list(string)` | `[]` | no |
+| <a name="input_table_policy_allow_principal_type"></a> [table\_policy\_allow\_principal\_type](#input\_table\_policy\_allow\_principal\_type) | Set which principal type you will specify in var.table\_policy\_allow\_principal\_identifiers | `string` | `"AWS"` | no |
+| <a name="input_table_policy_condition_test"></a> [table\_policy\_condition\_test](#input\_table\_policy\_condition\_test) | Set which condition to use when checking access | `string` | `"ArnLike"` | no |
+| <a name="input_table_policy_condition_values"></a> [table\_policy\_condition\_values](#input\_table\_policy\_condition\_values) | Set which conditional values to allow access to the table | `list(string)` | `[]` | no |
+| <a name="input_table_policy_condition_variable"></a> [table\_policy\_condition\_variable](#input\_table\_policy\_condition\_variable) | Set which conditional variable check to allow access to the table | `string` | `"aws:PrincipalArn"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
 | <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Updated Terraform resource management timeouts | `map(string)` | <pre>{<br>  "create": "10m",<br>  "delete": "10m",<br>  "update": "60m"<br>}</pre> | no |
 | <a name="input_ttl_attribute_name"></a> [ttl\_attribute\_name](#input\_ttl\_attribute\_name) | The name of the table attribute to store the TTL timestamp in | `string` | `"ttl"` | no |
