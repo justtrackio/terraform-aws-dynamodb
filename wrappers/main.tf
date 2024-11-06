@@ -3,9 +3,54 @@ module "wrapper" {
 
   for_each = var.items
 
-  create_table                       = try(each.value.create_table, var.defaults.create_table, true)
+  context = try(each.value.context, var.defaults.context, {
+    enabled             = true
+    namespace           = null
+    tenant              = null
+    environment         = null
+    stage               = null
+    name                = null
+    delimiter           = null
+    attributes          = []
+    tags                = {}
+    additional_tag_map  = {}
+    regex_replace_chars = null
+    label_order         = []
+    id_length_limit     = null
+    label_key_case      = null
+    label_value_case    = null
+    descriptor_formats  = {}
+
+
+
+
+
+
+
+    labels_as_tags = ["unset"]
+  })
+  enabled                            = try(each.value.enabled, var.defaults.enabled, null)
+  namespace                          = try(each.value.namespace, var.defaults.namespace, null)
+  tenant                             = try(each.value.tenant, var.defaults.tenant, null)
+  environment                        = try(each.value.environment, var.defaults.environment, null)
+  stage                              = try(each.value.stage, var.defaults.stage, null)
   name                               = try(each.value.name, var.defaults.name, null)
+  delimiter                          = try(each.value.delimiter, var.defaults.delimiter, null)
   attributes                         = try(each.value.attributes, var.defaults.attributes, [])
+  labels_as_tags                     = try(each.value.labels_as_tags, var.defaults.labels_as_tags, ["default"])
+  tags                               = try(each.value.tags, var.defaults.tags, {})
+  additional_tag_map                 = try(each.value.additional_tag_map, var.defaults.additional_tag_map, {})
+  label_order                        = try(each.value.label_order, var.defaults.label_order, null)
+  regex_replace_chars                = try(each.value.regex_replace_chars, var.defaults.regex_replace_chars, null)
+  id_length_limit                    = try(each.value.id_length_limit, var.defaults.id_length_limit, null)
+  label_key_case                     = try(each.value.label_key_case, var.defaults.label_key_case, null)
+  label_value_case                   = try(each.value.label_value_case, var.defaults.label_value_case, null)
+  descriptor_formats                 = try(each.value.descriptor_formats, var.defaults.descriptor_formats, {})
+  aws_account_id                     = try(each.value.aws_account_id, var.defaults.aws_account_id, null)
+  aws_region                         = try(each.value.aws_region, var.defaults.aws_region, null)
+  organizational_unit                = try(each.value.organizational_unit, var.defaults.organizational_unit, null)
+  create_table                       = try(each.value.create_table, var.defaults.create_table, true)
+  table_attributes                   = try(each.value.table_attributes, var.defaults.table_attributes)
   hash_key                           = try(each.value.hash_key, var.defaults.hash_key, null)
   range_key                          = try(each.value.range_key, var.defaults.range_key, null)
   billing_mode                       = try(each.value.billing_mode, var.defaults.billing_mode, "PAY_PER_REQUEST")
@@ -21,12 +66,14 @@ module "wrapper" {
   stream_view_type                   = try(each.value.stream_view_type, var.defaults.stream_view_type, null)
   server_side_encryption_enabled     = try(each.value.server_side_encryption_enabled, var.defaults.server_side_encryption_enabled, false)
   server_side_encryption_kms_key_arn = try(each.value.server_side_encryption_kms_key_arn, var.defaults.server_side_encryption_kms_key_arn, null)
-  tags                               = try(each.value.tags, var.defaults.tags, {})
   timeouts = try(each.value.timeouts, var.defaults.timeouts, {
     create = "10m"
     update = "60m"
     delete = "10m"
   })
+  alarm               = try(each.value.alarm, var.defaults.alarm, {})
+  alarm_enabled       = try(each.value.alarm_enabled, var.defaults.alarm_enabled, false)
+  alarm_topic_arn     = try(each.value.alarm_topic_arn, var.defaults.alarm_topic_arn, null)
   autoscaling_enabled = try(each.value.autoscaling_enabled, var.defaults.autoscaling_enabled, false)
   autoscaling_defaults = try(each.value.autoscaling_defaults, var.defaults.autoscaling_defaults, {
     scale_in_cooldown  = 0

@@ -4,7 +4,7 @@ locals {
 }
 
 resource "aws_dynamodb_table" "this" {
-  count = var.create_table && !var.autoscaling_enabled ? 1 : 0
+  count = module.this.enabled ? var.create_table && !var.autoscaling_enabled ? 1 : 0 : 0
 
   name                        = var.name
   billing_mode                = var.billing_mode
@@ -27,7 +27,7 @@ resource "aws_dynamodb_table" "this" {
   }
 
   dynamic "attribute" {
-    for_each = var.attributes
+    for_each = var.table_attributes
 
     content {
       name = attribute.value.name
@@ -91,7 +91,7 @@ resource "aws_dynamodb_table" "this" {
 }
 
 resource "aws_dynamodb_table" "autoscaled" {
-  count = var.create_table && var.autoscaling_enabled && !var.ignore_changes_global_secondary_index ? 1 : 0
+  count = module.this.enabled ? var.create_table && var.autoscaling_enabled && !var.ignore_changes_global_secondary_index ? 1 : 0 : 0
 
   name                        = var.name
   billing_mode                = var.billing_mode
@@ -114,7 +114,7 @@ resource "aws_dynamodb_table" "autoscaled" {
   }
 
   dynamic "attribute" {
-    for_each = var.attributes
+    for_each = var.table_attributes
 
     content {
       name = attribute.value.name
@@ -182,7 +182,7 @@ resource "aws_dynamodb_table" "autoscaled" {
 }
 
 resource "aws_dynamodb_table" "autoscaled_gsi_ignore" {
-  count = var.create_table && var.autoscaling_enabled && var.ignore_changes_global_secondary_index ? 1 : 0
+  count = module.this.enabled ? var.create_table && var.autoscaling_enabled && var.ignore_changes_global_secondary_index ? 1 : 0 : 0
 
   name                        = var.name
   billing_mode                = var.billing_mode
@@ -205,7 +205,7 @@ resource "aws_dynamodb_table" "autoscaled_gsi_ignore" {
   }
 
   dynamic "attribute" {
-    for_each = var.attributes
+    for_each = var.table_attributes
 
     content {
       name = attribute.value.name
@@ -273,7 +273,7 @@ resource "aws_dynamodb_table" "autoscaled_gsi_ignore" {
 }
 
 data "aws_iam_policy_document" "table_policy" {
-  count = length(var.table_policy_allow_principal_identifiers) > 0 ? 1 : 0
+  count = module.this.enabled && length(var.table_policy_allow_principal_identifiers) > 0 ? 1 : 0
   statement {
     resources = concat(aws_dynamodb_table.this[*].arn, aws_dynamodb_table.autoscaled[*].arn, aws_dynamodb_table.autoscaled_gsi_ignore[*].arn)
     effect    = "Allow"
@@ -294,7 +294,7 @@ data "aws_iam_policy_document" "table_policy" {
 }
 
 resource "aws_dynamodb_resource_policy" "policy" {
-  count        = length(var.table_policy_allow_principal_identifiers) > 0 ? 1 : 0
+  count        = module.this.enabled && length(var.table_policy_allow_principal_identifiers) > 0 ? 1 : 0
   resource_arn = try(aws_dynamodb_table.this[0].arn, aws_dynamodb_table.autoscaled[0].arn, aws_dynamodb_table.autoscaled_gsi_ignore[0].arn)
   policy       = data.aws_iam_policy_document.table_policy[0].json
 }

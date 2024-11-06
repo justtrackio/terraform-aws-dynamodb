@@ -4,16 +4,9 @@ variable "create_table" {
   default     = true
 }
 
-variable "name" {
-  description = "Name of the DynamoDB table"
-  type        = string
-  default     = null
-}
-
-variable "attributes" {
+variable "table_attributes" {
   description = "List of nested attribute definitions. Only required for hash_key and range_key attributes. Each attribute has two properties: name - (Required) The name of the attribute, type - (Required) Attribute type, which must be a scalar type: S, N, or B for (S)tring, (N)umber or (B)inary data"
   type        = list(map(string))
-  default     = []
 }
 
 variable "hash_key" {
@@ -106,12 +99,6 @@ variable "server_side_encryption_kms_key_arn" {
   default     = null
 }
 
-variable "tags" {
-  description = "A map of tags to add to all resources"
-  type        = map(string)
-  default     = {}
-}
-
 variable "timeouts" {
   description = "Updated Terraform resource management timeouts"
   type        = map(string)
@@ -120,6 +107,29 @@ variable "timeouts" {
     update = "60m"
     delete = "10m"
   }
+}
+
+variable "alarm" {
+  type = object({
+    datapoints_to_alarm = optional(number, 3)
+    evaluation_periods  = optional(number, 3)
+    period              = optional(number, 60)
+    threshold           = optional(number, 0)
+  })
+  description = "The details of the alarm such as datapoints to alarm, evaluation periods, period, and threshold."
+  default     = {}
+}
+
+variable "alarm_enabled" {
+  type        = bool
+  description = "Defines if throttling alarms should be created."
+  default     = false
+}
+
+variable "alarm_topic_arn" {
+  type        = string
+  description = "The ARN of the SNS Topic used for notifying about alarm/ok messages."
+  default     = null
 }
 
 variable "autoscaling_enabled" {

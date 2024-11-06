@@ -70,6 +70,13 @@ jobs:
         id: minMax
         uses: clowdhaus/terraform-min-max@v1.2.7
 
+      - name: Install hcledit
+        run: |
+          wget https://github.com/minamijoyo/hcledit/releases/download/v0.2.15/hcledit_0.2.15_linux_amd64.tar.gz
+          tar xaf hcledit_0.2.15_linux_amd64.tar.gz hcledit
+          mv hcledit /usr/local/bin/
+          rm hcledit_0.2.15_linux_amd64.tar.gz
+
       - name: Pre-commit Terraform ${{ steps.minMax.outputs.maxVersion }}
         uses: clowdhaus/terraform-composite-actions/pre-commit@v1.8.3
         with:
