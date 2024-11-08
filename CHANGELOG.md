@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [3.0.0](https://github.com/terraform-aws-modules/terraform-aws-dynamodb-table/compare/v2.0.0...v3.0.0) (2024-11-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* Bump TF version to 1.3.
+* Renamed `attributes` parameter to `table_attributes`. `attributes` is now used as an attribute for the table context.
+
+### Features
+
+* Allow creation of alarms for throttling reads and writes.
+
 ## [2.2.0](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.1.0...v2.2.0) (2024-04-10)
 
 

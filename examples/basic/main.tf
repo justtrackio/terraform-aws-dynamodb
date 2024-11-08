@@ -15,7 +15,7 @@ module "dynamodb_table" {
   table_class                 = "STANDARD"
   deletion_protection_enabled = false
 
-  attributes = [
+  table_attributes = [
     {
       name = "id"
       type = "N"
@@ -49,6 +49,8 @@ module "dynamodb_table" {
 
 module "disabled_dynamodb_table" {
   source = "../../"
+
+  table_attributes = []
 
   create_table = false
 }
