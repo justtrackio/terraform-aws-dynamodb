@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.2.0...v2.3.0) (2025-01-09)
+
+
+### Features
+
+* enable pitr and deletion protection by default ([#48](https://github.com/justtrackio/terraform-aws-dynamodb-table/issues/48)) ([f78e8ec](https://github.com/justtrackio/terraform-aws-dynamodb-table/commit/f78e8ecc7b62b3a6870a4face17457dac1abe57c))
+
 ## [2.2.0](https://github.com/justtrackio/terraform-aws-dynamodb-table/compare/v2.1.0...v2.2.0) (2024-04-10)
 
 
