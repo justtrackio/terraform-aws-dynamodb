@@ -49,7 +49,7 @@ variable "read_capacity" {
 variable "point_in_time_recovery_enabled" {
   description = "Whether to enable point-in-time recovery"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "ttl_enabled" {
@@ -205,7 +205,7 @@ variable "table_class" {
 variable "deletion_protection_enabled" {
   description = "Enables deletion protection for table"
   type        = bool
-  default     = null
+  default     = true
 }
 
 variable "ignore_changes_global_secondary_index" {
